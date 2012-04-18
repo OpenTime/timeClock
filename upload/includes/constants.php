@@ -1,0 +1,30 @@
+<?php
+/**
+ * Time Clock
+ * Constants
+ *
+ * @author      MarQuis L. Knox <marq@marquisknox.com>
+ * @license     GPL v2
+ * @link        http://www.gnu.org/licenses/gpl-2.0.html
+ * @link        https://github.com/MarQuisKnox/timeClock 
+ *
+ * @since       Thursday, October 22, 2009 / 12:05 PM GMT+1 mknox
+ * @edited      $Date: 2011-05-09 08:14:43 +0200 (Mon, 09 May 2011) $ $Author: mknox $
+ * @version     $Revision: 4 $
+ *
+ * @package     Time Clock
+ *
+ * @svn         $URL: file:///C:/Users/mknox/Documents/My%20Dev/Local%20SVN/timeClock/upload/includes/constants.php $
+ */
+
+define('BASEDIR', GetBaseDir());
+define('BASEURL', GetServerURL());
+define('TEMPLATEDIR', BASEDIR.'/templates/');
+define('TEMPLATENAME', 'generic');
+define('TEMPLATE', TEMPLATEDIR.TEMPLATENAME);
+define('TEMPLATE_ROOT', BASEURL.'/templates/'.TEMPLATENAME);
+define('TEMPLATE_CSS', BASEURL.'/templates/'.TEMPLATENAME.'/css');
+define('TEMPLATE_IMG', BASEURL.'/templates/'.TEMPLATENAME.'/images');
+define('TEMPLATE_JS', BASEURL.'/templates/'.TEMPLATENAME.'/js');
+define('THIS_URL', curPageURL());
+define('CURRENT_SCRIPT', ltrim($_SERVER['SCRIPT_NAME'],'/'));
