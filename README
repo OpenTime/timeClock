@@ -1,0 +1,9 @@
+Overview:
+
+'timeClock' is a script written in PHP to track the number of hours worked per day.
+It is designed for a single person.  I created this script to track my own work hours, because 
+I could not find a suitable open source script that functioned the way I wanted.
+
+Author:		MarQuis L. Knox <opensource@marquisknox.com>
+License:	GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
+URL:		https://github.com/MarQuisKnox/timeClock
