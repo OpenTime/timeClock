@@ -19,7 +19,7 @@ define('THIS_PAGE', 'index');
 require_once('includes/config.php');
 
 $data = $timeClock->isClockedIn();
-if(is_array($data)) {
+if( is_array( $data ) ) {
     $clockedIn = true;
 }
 
@@ -37,23 +37,38 @@ if(!empty($_POST)) {
         $timeClock->clockIn();
     }
 }
+
+if( !isset( $_COOKIE['jquery-ui-theme'] ) ) {
+	setcookie( 'jquery-ui-theme', 'ui-lightness' );	
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<title>Time Clock</title>
-	<link rel="stylesheet" href="css/jquery-ui/ui-lightness/jquery-ui-1.8.9.custom.css">
-	<script src="js/jquery-1.4.4.min.js"></script>
-    <script src="js/jquery-ui-1.8.9.custom.min.js"></script>
+	<link rel="stylesheet" href="css/jquery-ui/ui-lightness/jquery-ui-1.8.19.custom.css">
+	<script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/jquery-ui-1.8.19.custom.min.js"></script>
     <!--link rel="stylesheet" type="text/css" href="css/jquery.countdown.css"-->
     <script type="text/javascript" src="js/jquery.countdown.pack.js"></script>
 
     <link rel="stylesheet" type="text/css" media="screen" href="css/jqGrid/ui.jqgrid.css" />
     <script src="js/jqGrid/grid.locale-en.js" type="text/javascript"></script>
-    <script src="js/jqGrid/jquery.jqGrid.min.js" type="text/javascript"></script>
-
-    <?php if(@$clockedIn) {
+    <script src="js/jqGrid/jquery.jqGrid.min.js" type="text/javascript"></script> 
+    
+    <!-- jQuery UI Themeswitcher -->
+	<script src="http://jqueryui.com/themeroller/themeswitchertool/" type="text/javascript"></script>    
+    
+	<script type="text/javascript">
+		var CURRENT_THEME = '<?php echo $_COOKIE['jquery-ui-theme']; ?>';
+		$(document).ready(function() {
+	    	$('#switcher').themeswitcher( { loadTheme: CURRENT_THEME, cookieName: 'jquery-ui-theme' } );
+		});			
+	</script>
+    
+    <?php if( @$clockedIn ) {
     ?>
 	<script type="text/javascript">
 	$(function() {
@@ -101,8 +116,11 @@ if(!empty($_POST)) {
     ?>
 </head>
 <body>
-
-<div class="demo">
+    <p>
+    	<div id="switcher"></div>
+    </p>
+    
+	<div>
 
 <?php if(@$clockedIn) {
 ?>
@@ -136,35 +154,37 @@ if(!empty($_POST)) {
 ?>
 </div>
 
-	<script>
-	$(function() {
-		$( "#tabs" ).tabs({
-			ajaxOptions: {
-				error: function( xhr, status, index, anchor ) {
-					$( anchor.hash ).html(
-						"Couldn't load this tab. We'll try to fix this as soon as possible. " +
-						"If this wouldn't be a demo." );
+	<script type="text/javascript">
+		$(function() {          
+			$( "#tabs" ).tabs({
+				ajaxOptions: {
+					error: function( xhr, status, index, anchor ) {
+						$( anchor.hash ).html(
+							"Couldn't load this tab. We'll try to fix this as soon as possible. " +
+							"If this wouldn't be a demo." );
+					}
 				}
-			}
+			});
 		});
-	});
 	</script>
 
-
-
-<div class="demo">
-<div id="tabs">
-	<ul>
-		<li><a href="all_hours.html">All Hours</a></li>
-		<li><a href="settings.html">Settings</a></li>
-	</ul>
-</div>
+<div id="mainBody">	
+	<div id="tabs">
+		<ul>
+			<li>
+				<a href="all_hours.html">All Hours</a>
+			</li>
+			<li>
+				<a href="settings.html">Settings</a>
+			</li>
+		</ul>
+	</div>
 
 </div>
 
 <style type="text/css">
-html {font-size:70%}
-body {font-size:100%}
+	html {font-size:70%}
+	body {font-size:100%}
 </style>
 
 </body>
