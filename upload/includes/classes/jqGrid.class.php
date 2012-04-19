@@ -6,7 +6,7 @@
  * @author      MarQuis L. Knox <opensource@marquisknox.com>
  * @license     GPL v2
  * @link        http://www.gnu.org/licenses/gpl-2.0.html
- * @link        https://github.com/MarQuisKnox/timeClock
+ * @link        https://github.com/MarQuisKnox/timeClock 
  *
  * @since       Saturday, February 26, 2011 / 12:33 PM GMT+1 mknox
  * @edited      $Date: 2011-05-14 18:04:46 +0200 (Sat, 14 May 2011) $ $Author: mknox $
@@ -14,8 +14,6 @@
  *
  * @package     Time Clock
  * @subpackage  jqGrid
- *
- * @svn         $URL: file:///C:/Users/mknox/Documents/My%20Dev/Local%20SVN/timeClock/upload/includes/classes/jqGrid.class.php $
  */
 
 class jqGrid

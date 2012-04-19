@@ -13,8 +13,6 @@
  *
  * @category    Classes
  * @package     Time Clock
- *
- * @svn         $URL: file:///C:/Users/mknox/Documents/My%20Dev/Local%20SVN/timeClock/upload/includes/classes/timeClock.class.php $
  */
 
 class timeClock

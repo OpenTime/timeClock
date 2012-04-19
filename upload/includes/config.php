@@ -3,7 +3,7 @@
  * Time Clock
  * Global Config
  *
- * @author      MarQuis L. Knox <marq@marquisknox.com>
+ * @author      MarQuis L. Knox <opensource@marquisknox.com>
  * @license     GPL v2
  * @link        http://www.gnu.org/licenses/gpl-2.0.html
  * @link        https://github.com/MarQuisKnox/timeClock
@@ -13,8 +13,6 @@
  * @version     $Revision: 4 $
  *
  * @package     Time Clock
- *
- * @svn         $URL: file:///C:/Users/mknox/Documents/My%20Dev/Local%20SVN/timeClock/upload/includes/config.php $
  */
 
 error_reporting(E_ALL);

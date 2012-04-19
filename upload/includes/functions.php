@@ -13,8 +13,6 @@
  *
  * @package     Time Clock
  * @subpackage  Common Functions
- *
- * @svn         $URL: file:///C:/Users/mknox/Documents/My%20Dev/Local%20SVN/timeClock/upload/includes/functions.php $
  */
 
 error_reporting(E_ALL);
@@ -721,4 +719,11 @@ function countWeekendDays($from, $to)
     $sun = getAllSundays($from, $to);
 
     return ($sat['count'] + $sun['count']);
+}
+
+function checkInstall()
+{
+	if( !file_exists(BASEDIR.'/includes/timeClock.installed') ) {
+		exit('not installed');	
+	}	
 }

@@ -14,8 +14,6 @@
  * @category    Classes
  * @package     Time Clock
  * @subpackage  Singleton
- *
- * @svn         $URL: file:///C:/Users/mknox/Documents/My%20Dev/Local%20SVN/timeClock/upload/includes/classes/singleton.class.php $
  */
 
 class Singleton
