@@ -23,7 +23,8 @@ if(empty($_POST)) {
 }
 
 // get the id passed automatically to the request
-$id = $_POST['undefined'];
+$id			= $_POST['undefined'];
+$dayPost 	= substr( $_POST['day'], 0, 2 );
 
 // construct the query
 $sql    = "SELECT * FROM `records` WHERE `id` = ".mysql_real_escape_string($id);
@@ -41,7 +42,7 @@ $year   = $data['year'];
 $sql    = "SELECT COUNT(DISTINCT `day`) AS `count` FROM `records` WHERE ";
 $sql   .= "`week` = '".mysql_real_escape_string($week)."' ";
 $sql   .= "AND `year` = '".mysql_real_escape_string($year)."' ";
-$sql   .= "AND `id` <= '".mysql_real_escape_string($id)."' ";
+$sql   .= "AND `day` <= '".mysql_real_escape_string( $dayPost )."' ";
 $res    = mysql_query($sql) OR die(mysql_error());
 
 $data   = mysql_fetch_assoc($res);
@@ -50,7 +51,7 @@ $count  = $data['count'];
 $sql    = "SELECT * FROM `records` WHERE ";
 $sql   .= "`week` = '".mysql_real_escape_string($week)."' ";
 $sql   .= "AND `year` = '".mysql_real_escape_string($year)."' ";
-$sql   .= "AND `id` <= '".mysql_real_escape_string($id)."' ";
+$sql   .= "AND `day` <= '".mysql_real_escape_string( $dayPost )."' ";
 $res    = mysql_query($sql) OR die(mysql_error());
 
 $data       = array();
@@ -72,7 +73,7 @@ while($row = mysql_fetch_assoc($res)) {
 $sql    = "SELECT COUNT(DISTINCT `day`) AS `count` FROM `records` WHERE ";
 $sql   .= "`month` = '".mysql_real_escape_string($month)."' ";
 $sql   .= "AND `year` = '".mysql_real_escape_string($year)."' ";
-$sql   .= "AND `id` <= '".mysql_real_escape_string($id)."' ";
+$sql   .= "AND `day` <= '".mysql_real_escape_string( $dayPost )."' ";
 $res    = mysql_query($sql) OR die(mysql_error());
 
 $data   = mysql_fetch_assoc($res);
@@ -81,7 +82,7 @@ $count  = $data['count'];
 $sql    = "SELECT * FROM `records` WHERE ";
 $sql   .= "`month` = '".mysql_real_escape_string($month)."' ";
 $sql   .= "AND `year` = '".mysql_real_escape_string($year)."' ";
-$sql   .= "AND `id` <= '".mysql_real_escape_string($id)."' ";
+$sql   .= "AND `day` <= '".mysql_real_escape_string( $dayPost )."' ";
 $res    = mysql_query($sql) OR die(mysql_error());
 
 $data       = array();
@@ -102,7 +103,7 @@ while($row = mysql_fetch_assoc($res)) {
 // year logic
 $sql    = "SELECT COUNT(DISTINCT `day`, `month`, `year`) AS `count` FROM `records` WHERE ";
 $sql   .= "`year` = '".mysql_real_escape_string($year)."' ";
-$sql   .= "AND `id` <= '".mysql_real_escape_string($id)."' ";
+$sql   .= "AND `day` <= '".mysql_real_escape_string( $dayPost )."' ";
 $res    = mysql_query($sql) OR die(mysql_error());
 
 $data   = mysql_fetch_assoc($res);
@@ -110,7 +111,7 @@ $count  = $data['count'];
 
 $sql    = "SELECT * FROM `records` WHERE ";
 $sql   .= "`year` = '".mysql_real_escape_string($year)."' ";
-$sql   .= "AND `id` <= '".mysql_real_escape_string($id)."' ";
+$sql   .= "AND `day` <= '".mysql_real_escape_string( $dayPost )."' ";
 $res    = mysql_query($sql) OR die(mysql_error());
 
 $data       = array();
