@@ -38,8 +38,9 @@ if(!empty($_POST)) {
     }
 }
 
-if( !isset( $_COOKIE['jquery-ui-theme'] ) ) {
-	setcookie( 'jquery-ui-theme', 'ui-lightness' );	
+if( !isset( $_SESSION['jquery-ui-theme'] ) OR !strlen( @$_SESSION['jquery-ui-theme'] ) ) {
+	setcookie( 'jquery-ui-theme', 'Redmond' );
+	$_SESSION['jquery-ui-theme'] = 'Redmond';	
 }
 
 ?>
@@ -48,7 +49,7 @@ if( !isset( $_COOKIE['jquery-ui-theme'] ) ) {
 <head>
 	<meta charset="utf-8">
 	<title>Time Clock</title>
-	<link rel="stylesheet" href="css/jquery-ui/ui-lightness/jquery-ui-1.8.19.custom.css">
+	<link rel="stylesheet" href="css/jquery-ui/ui-blank-white/jquery-ui-1.8.19.custom.css">
 	<script src="js/jquery-1.7.2.min.js"></script>
     <script src="js/jquery-ui-1.8.19.custom.min.js"></script>
     <!--link rel="stylesheet" type="text/css" href="css/jquery.countdown.css"-->
@@ -56,15 +57,30 @@ if( !isset( $_COOKIE['jquery-ui-theme'] ) ) {
 
     <link rel="stylesheet" type="text/css" media="screen" href="css/jqGrid/ui.jqgrid.css" />
     <script src="js/jqGrid/grid.locale-en.js" type="text/javascript"></script>
-    <script src="js/jqGrid/jquery.jqGrid.min.js" type="text/javascript"></script> 
+    <script src="js/jqGrid/jquery.jqGrid.min.js" type="text/javascript"></script>
+    
+    <!--  blockUI -->
+    <script src="js/jquery.blockUI.js" type="text/javascript"></script>
+    
+    <!-- php.js -->
+	<script src="js/phpjs.js" type="text/javascript"></script>
     
     <!-- jQuery UI Themeswitcher -->
 	<script src="http://jqueryui.com/themeroller/themeswitchertool/" type="text/javascript"></script>    
     
 	<script type="text/javascript">
-		var CURRENT_THEME = '<?php echo $_COOKIE['jquery-ui-theme']; ?>';
-		$(document).ready(function() {
-	    	$('#switcher').themeswitcher( { loadTheme: CURRENT_THEME, cookieName: 'jquery-ui-theme' } );
+		var CURRENT_THEME = '<?php echo $_SESSION['jquery-ui-theme']; ?>';
+		if( strlen( CURRENT_THEME ) ) {
+		} else {
+			CURRENT_THEME = 'Redmond';
+		}	
+			
+		$(document).ready(function() {			
+	    	$('#switcher').themeswitcher( { loadTheme: CURRENT_THEME, cookieName: 'jquery-ui-theme', 
+		    	onSelect: function() {
+		    		
+	        	}
+	    	});	    	
 		});			
 	</script>
     
@@ -115,7 +131,7 @@ if( !isset( $_COOKIE['jquery-ui-theme'] ) ) {
     }
     ?>
 </head>
-<body>
+<body style="display: none;">
     <p>
     	<div id="switcher"></div>
     </p>
@@ -165,16 +181,19 @@ if( !isset( $_COOKIE['jquery-ui-theme'] ) ) {
 					}
 				}
 			});
+
+    		$.unblockUI();
+    		$('body').show();			
 		});
 	</script>
 
-<div id="mainBody">	
-	<div id="tabs">
-		<ul>
-			<li>
+<div id="mainBody" class="ui-widget-content">	
+	<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+		<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+			<li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
 				<a href="all_hours.html">All Hours</a>
 			</li>
-			<li>
+			<li class="ui-state-default ui-corner-top">
 				<a href="settings.html">Settings</a>
 			</li>
 		</ul>
@@ -186,6 +205,12 @@ if( !isset( $_COOKIE['jquery-ui-theme'] ) ) {
 	html {font-size:70%}
 	body {font-size:100%}
 </style>
+
+<!--  START:	blockUI on page load -->
+<div style="display: none;" class="blockUI"></div>
+<div style="z-index: 1000; border: medium none; margin: 0pt; padding: 0pt; width: 100%; height: 100%; top: 0pt; left: 0pt; background-color: rgb(255, 255, 255); opacity: 100; cursor: wait; position: fixed;" class="blockUI blockOverlay"></div>
+<div style="z-index: 1011; display: none; position: fixed;" class="blockUI blockMsg blockPage"></div>
+<!--  END:		blockUI on page load -->
 
 </body>
 </html>
