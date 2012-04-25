@@ -48,4 +48,4 @@ if ( !function_exists('mysql_set_charset') ) {
 $mysql = mysql_connect($config['db_host'], $config['db_user'], $config['db_pass']) OR die(mysql_error());
 mysql_select_db($config['db_name']) OR die(mysql_error());
 mysql_set_charset('utf8', $mysql);
-mysql_query('SET NAMES utf8', $mysql);
+mysql_query( 'SET NAMES utf8', $mysql );

@@ -25,6 +25,11 @@ function GetBaseDir()
     return $basedirPath;
 }
 
+function GetBaseURL()
+{
+	return GetServerURL().'/'.basename( GetBaseDir() );
+}
+
 function WriteLog($filename, $msg, $mode = 'a')
 {
     $fd = fopen($filename, $mode);
@@ -726,4 +731,12 @@ function checkInstall()
 	if( !file_exists(BASEDIR.'/includes/timeClock.installed') ) {
 		exit('not installed');	
 	}	
+}
+
+function jQueryUIStringToTemplateName( $string )
+{
+	$string = str_replace( ' ', '-', $string );
+	$string = strtolower( $string );
+
+	return $string;
 }

@@ -48,5 +48,6 @@ $jqGrid                 = Singleton::getInstance('jqGrid');
 $smarty                 = Singleton::getInstance('Smarty');
 $smarty->compile_check  = true;
 $smarty->debugging      = false;
+$smarty->template_dir 	= TEMPLATE;
 $timeClock              = Singleton::getInstance('timeClock');
 $timeClock->defineConfig();

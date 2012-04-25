@@ -23,25 +23,29 @@ if( is_array( $data ) ) {
     $clockedIn = true;
 }
 
-if(@$_GET['settings'] == 'true') {
-    exit($jqGrid->outputSettingsJson());
+if( @$_GET['settings'] == 'true' ) {
+    exit( $jqGrid->outputSettingsJson() );
 }
 
-if(!empty($_POST)) {
-    if(!strlen(@$_POST['clockOut']) AND !strlen(@$_POST['clockIn'])) {
+if( !empty( $_POST ) ) {
+    if( !strlen( @$_POST['clockOut'] ) AND !strlen( @$_POST['clockIn'] ) ) {
         header('Content-Type: application/json; charset=UTF-8');
-        exit($jqGrid->output_json());
-    } elseif(strlen(@$_POST['clockOut'])) {
-        $timeClock->clockOut($_POST['Id']);
-    } elseif(strlen(@$_POST['clockIn'])) {
+        exit( $jqGrid->output_json() );
+    } elseif( strlen( @$_POST['clockOut'] ) ) {
+        $timeClock->clockOut( $_POST['Id'] );
+    } elseif( strlen( @$_POST['clockIn'] ) ) {
         $timeClock->clockIn();
     }
 }
 
-if( !isset( $_SESSION['jquery-ui-theme'] ) OR !strlen( @$_SESSION['jquery-ui-theme'] ) ) {
-	setcookie( 'jquery-ui-theme', 'Redmond' );
-	$_SESSION['jquery-ui-theme'] = 'Redmond';	
+if( isset( $_COOKIE['theme'] ) AND strlen( @$_COOKIE['theme'] ) ) {
+	$_SESSION['theme'] = $_COOKIE['theme'];	
+} else {
+	setcookie( 'theme', DEFAULT_JQUERY_UI_THEME );
+	$_SESSION['theme'] = DEFAULT_JQUERY_UI_THEME;	
 }
+
+$_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
 
 ?>
 <!DOCTYPE html>
@@ -49,7 +53,8 @@ if( !isset( $_SESSION['jquery-ui-theme'] ) OR !strlen( @$_SESSION['jquery-ui-the
 <head>
 	<meta charset="utf-8">
 	<title>Time Clock</title>
-	<link rel="stylesheet" href="css/jquery-ui/ui-blank-white/jquery-ui-1.8.19.custom.css">
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.19/themes/base/jquery-ui.css">
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.19/themes/<?php echo $_SESSION['themeString']; ?>/jquery-ui.css">
 	<script src="js/jquery-1.7.2.min.js"></script>
     <script src="js/jquery-ui-1.8.19.custom.min.js"></script>
     <!--link rel="stylesheet" type="text/css" href="css/jquery.countdown.css"-->
@@ -69,14 +74,13 @@ if( !isset( $_SESSION['jquery-ui-theme'] ) OR !strlen( @$_SESSION['jquery-ui-the
 	<script src="http://jqueryui.com/themeroller/themeswitchertool/" type="text/javascript"></script>    
     
 	<script type="text/javascript">
-		var CURRENT_THEME = '<?php echo $_SESSION['jquery-ui-theme']; ?>';
-		if( strlen( CURRENT_THEME ) ) {
-		} else {
-			CURRENT_THEME = 'Redmond';
-		}	
+		var CURRENT_THEME = '<?php echo $_SESSION['theme']; ?>';
+		if( !strlen( CURRENT_THEME ) ) {
+			CURRENT_THEME = '<?php echo DEFAULT_JQUERY_UI_THEME; ?>';			
+		}
 			
 		$(document).ready(function() {			
-	    	$('#switcher').themeswitcher( { loadTheme: CURRENT_THEME, cookieName: 'jquery-ui-theme', 
+	    	$('#switcher').themeswitcher( { loadTheme: CURRENT_THEME, cookieName: 'theme', 
 		    	onSelect: function() {
 		    		
 	        	}
@@ -202,8 +206,8 @@ if( !isset( $_SESSION['jquery-ui-theme'] ) OR !strlen( @$_SESSION['jquery-ui-the
 </div>
 
 <style type="text/css">
-	html {font-size:70%}
-	body {font-size:100%}
+	html { font-size: 70% }
+	body { font-size: 100% }
 </style>
 
 <!--  START:	blockUI on page load -->

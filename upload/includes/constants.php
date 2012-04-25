@@ -15,14 +15,15 @@
  * @package     Time Clock
  */
 
-define('BASEDIR', GetBaseDir());
-define('BASEURL', GetServerURL());
-define('TEMPLATEDIR', BASEDIR.'/templates/');
-define('TEMPLATENAME', 'generic');
-define('TEMPLATE', TEMPLATEDIR.TEMPLATENAME);
-define('TEMPLATE_ROOT', BASEURL.'/templates/'.TEMPLATENAME);
-define('TEMPLATE_CSS', BASEURL.'/templates/'.TEMPLATENAME.'/css');
-define('TEMPLATE_IMG', BASEURL.'/templates/'.TEMPLATENAME.'/images');
-define('TEMPLATE_JS', BASEURL.'/templates/'.TEMPLATENAME.'/js');
-define('THIS_URL', curPageURL());
-define('CURRENT_SCRIPT', ltrim($_SERVER['SCRIPT_NAME'],'/'));
+define( 'BASEDIR', GetBaseDir() );
+define( 'BASEURL', GetBaseURL() );
+define( 'TEMPLATEDIR', BASEDIR.'/templates/' );
+define( 'TEMPLATENAME', 'generic' );
+define( 'TEMPLATE', TEMPLATEDIR.TEMPLATENAME );
+define( 'TEMPLATE_ROOT', BASEURL.'/templates/'.TEMPLATENAME );
+define( 'TEMPLATE_CSS', BASEURL.'/templates/'.TEMPLATENAME.'/css' );
+define( 'TEMPLATE_IMG', BASEURL.'/templates/'.TEMPLATENAME.'/images' );
+define( 'TEMPLATE_JS', BASEURL.'/templates/'.TEMPLATENAME.'/js' );
+define( 'THIS_URL', curPageURL() );
+define( 'CURRENT_SCRIPT', ltrim( $_SERVER['SCRIPT_NAME'], '/' ) );
+define( 'DEFAULT_JQUERY_UI_THEME', 'Redmond' );
