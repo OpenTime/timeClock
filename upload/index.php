@@ -53,7 +53,7 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
 <head>
 	<meta charset="utf-8">
 	<title>Time Clock</title>
-	<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.19/themes/base/jquery-ui.css">
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.19/themes/base/jquery-ui.css">
 	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.19/themes/<?php echo $_SESSION['themeString']; ?>/jquery-ui.css">
 	<script src="js/jquery-1.7.2.min.js"></script>
     <script src="js/jquery-ui-1.8.19.custom.min.js"></script>
