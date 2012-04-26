@@ -15,8 +15,17 @@
  * @package     Time Clock
  */
 
-define('THIS_PAGE', 'index');
+define( 'THIS_PAGE', 'index' );
 require_once('includes/config.php');
+
+if( !empty( $_POST ) ) {
+	if( isset( $_POST['sessionUpdate'] ) ) {
+		if( strlen( @$_POST['theme'] ) ) {
+			$_SESSION['theme'] = $_POST['theme'];
+			exit( '$_SESSION["theme"] set to:  '.$_SESSION['theme'] );
+		}
+	}
+}
 
 $data = $timeClock->isClockedIn();
 if( is_array( $data ) ) {
@@ -39,7 +48,7 @@ if( !empty( $_POST ) ) {
 }
 
 if( isset( $_COOKIE['theme'] ) AND strlen( @$_COOKIE['theme'] ) ) {
-	$_SESSION['theme'] = $_COOKIE['theme'];	
+	$_SESSION['theme'] = $_COOKIE['theme'];			
 } else {
 	setcookie( 'theme', DEFAULT_JQUERY_UI_THEME );
 	$_SESSION['theme'] = DEFAULT_JQUERY_UI_THEME;	
@@ -48,6 +57,7 @@ if( isset( $_COOKIE['theme'] ) AND strlen( @$_COOKIE['theme'] ) ) {
 $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,8 +65,14 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
 	<title>Time Clock</title>
 	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.19/themes/base/jquery-ui.css">
 	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.19/themes/<?php echo $_SESSION['themeString']; ?>/jquery-ui.css">
+	
+	<script type="text/javascript">
+		var DEBUG = true;
+	</script>
+	
 	<script src="js/jquery-1.7.2.min.js"></script>
-    <script src="js/jquery-ui-1.8.19.custom.min.js"></script>
+    <script src="js/jquery-ui-1.8.19.custom.min.js"></script>    
+    <script src="js/consolelog.min.js"></script>
     <!--link rel="stylesheet" type="text/css" href="css/jquery.countdown.css"-->
     <script type="text/javascript" src="js/jquery.countdown.pack.js"></script>
 
@@ -67,22 +83,47 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
     <!--  blockUI -->
     <script src="js/jquery.blockUI.js" type="text/javascript"></script>
     
+    <!--  custom functions -->
+    <script src="js/functions.js?<?php echo rand(); ?>"></script>
+    
     <!-- php.js -->
-	<script src="js/phpjs.js" type="text/javascript"></script>
+	<script src="js/phpjs.js?<?php echo rand(); ?>" type="text/javascript"></script>
     
     <!-- jQuery UI Themeswitcher -->
-	<script src="http://jqueryui.com/themeroller/themeswitchertool/" type="text/javascript"></script>    
+	<!-- script src="http://jqueryui.com/themeroller/themeswitchertool/" type="text/javascript"></script-->	        
+	<script src="js/themeswitcher.js?<?php echo rand(); ?>" type="text/javascript"></script>
     
 	<script type="text/javascript">
-		var CURRENT_THEME = '<?php echo $_SESSION['theme']; ?>';
+		var BASEURL			= '<?php echo BASEURL; ?>';
+		var CURRENT_THEME 	= '<?php echo $_SESSION['theme']; ?>';
+
+		if( DEBUG ) {
+			console.log( 'Selected jQuery UI Theme:  ' + CURRENT_THEME );
+		}	
+		
 		if( !strlen( CURRENT_THEME ) ) {
 			CURRENT_THEME = '<?php echo DEFAULT_JQUERY_UI_THEME; ?>';			
 		}
 			
 		$(document).ready(function() {			
-	    	$('#switcher').themeswitcher( { loadTheme: CURRENT_THEME, cookieName: 'theme', 
+	    	$('#switcher').themeswitcher( { 
+		    	loadTheme: CURRENT_THEME, 
+		    	cookieExpires: 3650, 
+		    	cookiePath: '/',		   
+		    	cookieName: 'theme', 
+		    	cookieOnSet: function(cookieName, cookieValue) {
+		    		$.post( BASEURL + '/', { sessionUpdate: true, theme: cookieValue },
+							function( data ) {
+								// I'm chilling, chilling...								
+		    					$.unblockUI();
+							}
+					);					
+			    },
 		    	onSelect: function() {
-		    		
+		    		blockUIWithMessage();		    			
+	        	},
+	        	onSelectComplete: function() {		     
+	        		
 	        	}
 	    	});	    	
 		});			
@@ -135,16 +176,12 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
     }
     ?>
 </head>
-<body style="display: none;">
-    <p>
-    	<div id="switcher"></div>
-    </p>
-    
+<body style="display: none;">    
 	<div>
 
-<?php if(@$clockedIn) {
+<?php if( @$clockedIn ) {
 ?>
-<div id="dialog-message" title="Clocked in">
+<div id="dialog-message" title="Clocked in" style="display: none;">
 	<p>
     You are currently clocked in.
     <br />
@@ -187,7 +224,8 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
 			});
 
     		$.unblockUI();
-    		$('body').show();			
+    		$('body').fadeIn();
+    		$('#dialog-message').fadeIn(); 
 		});
 	</script>
 
@@ -212,9 +250,16 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
 
 <!--  START:	blockUI on page load -->
 <div style="display: none;" class="blockUI"></div>
-<div style="z-index: 1000; border: medium none; margin: 0pt; padding: 0pt; width: 100%; height: 100%; top: 0pt; left: 0pt; background-color: rgb(255, 255, 255); opacity: 100; cursor: wait; position: fixed;" class="blockUI blockOverlay"></div>
-<div style="z-index: 1011; display: none; position: fixed;" class="blockUI blockMsg blockPage"></div>
+<div style="z-index: 1000; position: fixed;" class="blockUI blockOverlay ui-widget-overlay"></div>
+<div style="z-index: 1011; position: fixed; width: 30%; top: 40%; left: 35%;" class="blockUI blockMsg blockPage ui-dialog ui-widget ui-corner-all ui-widget-content ui-draggable">
+	<div class="ui-widget-header ui-dialog-titlebar ui-corner-all blockTitle">Loading</div>
+	<div class="ui-widget-content ui-dialog-content">
+		<p>Loading, please wait...</p>
+	</div>
+</div>
 <!--  END:		blockUI on page load -->
+
+<div id="switcher" style="margin-top: 10px; margin-right: 10px; position: fixed; right: 0;"></div>
 
 </body>
 </html>

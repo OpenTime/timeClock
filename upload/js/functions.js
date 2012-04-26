@@ -1,0 +1,33 @@
+/**
+ * Various JavaScript Functions
+ *
+ * @author      MarQuis L. Knox <opensource@marquisknox.com>
+ * @license     GPL v2
+ * @link        http://www.gnu.org/licenses/gpl-2.0.html
+ * @link        https://github.com/MarQuisKnox/timeClock
+ *
+ * @since       Wednesday, April 25, 2012 / 01:47 AM GMT+1 mknox
+ * @edited      $Date: 2011-03-10 12:38:09 +0100 (Thu, 10 Mar 2011) $ $Author: mknox $
+ * @version     $Revision: 1 $
+ *
+ * @package     timeClock
+ */
+
+$('#logo').live('click', 
+		function() {
+			blockUIWithMessage( 'Loading...', 'Loading, please wait...' );	
+			window.location = BASEURL; 
+		}
+);
+
+function blockUIWithMessage( title, message )
+{ 
+	title	= typeof title !== 'undefined' ? title : 'Loading...';
+	message = typeof message !== 'undefined' ? message : 'Loading, please wait...';
+	
+	$.blockUI({ 
+		theme:		true, 
+        title:    	title, 
+        message:	message + '&nbsp;&nbsp;<img style="vertical-align: middle;" src="' + BASEURL + '/img/loading.gif" border="0">'
+	});     
+}

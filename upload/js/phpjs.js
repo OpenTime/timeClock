@@ -74,3 +74,97 @@ function strlen (string) {
     }
     return lgth;
 }
+
+function time_sleep_until (timestamp) {
+    // http://kevin.vanzonneveld.net
+    // +   original by: Brett Zamir (http://brett-zamir.me)
+    // %          note: For study purposes. Current implementation could lock up the user's browser.
+    // %          note: Expects a timestamp in seconds, so DO NOT pass in a JavaScript timestamp which are in milliseconds (e.g., new Date()) or otherwise the function will lock up the browser 1000 times longer than probably intended.
+    // %          note: Consider using setTimeout() instead.
+    // *     example 1: time_sleep_until(1233146501) // delays until the time indicated by the given timestamp is reached
+    // *     returns 1: true
+    while (new Date() < timestamp * 1000) {}
+    return true;
+}
+
+function is_int (mixed_var) {
+    // http://kevin.vanzonneveld.net
+    // +   original by: Alex
+    // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // +    revised by: Matt Bradley
+    // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // +   improved by: WebDevHobo (http://webdevhobo.blogspot.com/)
+    // +   improved by: Rafal Kukawski (http://blog.kukawski.pl)
+    // %        note 1: 1.0 is simplified to 1 before it can be accessed by the function, this makes
+    // %        note 1: it different from the PHP implementation. We can't fix this unfortunately.
+    // *     example 1: is_int(23)
+    // *     returns 1: true
+    // *     example 2: is_int('23')
+    // *     returns 2: false
+    // *     example 3: is_int(23.5)
+    // *     returns 3: false
+    // *     example 4: is_int(true)
+    // *     returns 4: false
+    
+    return mixed_var === +mixed_var && isFinite(mixed_var) && !(mixed_var % 1);
+}
+
+function is_integer (mixed_var) {
+    // http://kevin.vanzonneveld.net
+    // +   original by: Paulo Freitas
+    //  -   depends on: is_int
+    // %        note 1: 1.0 is simplified to 1 before it can be accessed by the function, this makes
+    // %        note 1: it different from the PHP implementation. We can't fix this unfortunately.
+    // *     example 1: is_integer(186.31);
+    // *     returns 1: false
+    // *     example 2: is_integer(12);
+    // *     returns 2: true
+    return this.is_int(mixed_var);
+}
+
+function intval (mixed_var, base) {
+    // http://kevin.vanzonneveld.net
+    // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // +   improved by: stensi
+    // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // +   input by: Matteo
+    // +   bugfixed by: Brett Zamir (http://brett-zamir.me)
+    // +   bugfixed by: Rafal Kukawski (http://kukawski.pl)
+    // *     example 1: intval('Kevin van Zonneveld');
+    // *     returns 1: 0
+    // *     example 2: intval(4.2);
+    // *     returns 2: 4
+    // *     example 3: intval(42, 8);
+    // *     returns 3: 42
+    // *     example 4: intval('09');
+    // *     returns 4: 9
+    // *     example 5: intval('1e', 16);
+    // *     returns 5: 30
+    var tmp;
+
+    var type = typeof(mixed_var);
+
+    if (type === 'boolean') {
+        return +mixed_var;
+    } else if (type === 'string') {
+        tmp = parseInt(mixed_var, base || 10);
+        return (isNaN(tmp) || !isFinite(tmp)) ? 0 : tmp;
+    } else if (type === 'number' && isFinite(mixed_var)) {
+        return mixed_var | 0;
+    } else {
+        return 0;
+    }
+}
+
+
+// @link	http://www.phpied.com/sleep-in-javascript/
+function sleep(milliseconds) {
+	if( !is_int(milliseconds) ) {
+		return;
+	}
+	
+	var start 	= new Date().getTime();
+	while ((new Date().getTime() - start) < milliseconds) {
+		// Do nothing
+	}
+}
