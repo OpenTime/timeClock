@@ -15,25 +15,28 @@
  * @package     Time Clock
  */
 
-error_reporting(E_ALL);
+error_reporting( E_ALL );
 ini_set('display_errors', true);
-define('IN_SITE',true);
+define( 'IN_SITE',true );
 // 10 years
-define('COOKIE_TIMEOUT',315360000);
-define('GARBAGE_TIMEOUT',COOKIE_TIMEOUT);
-ini_set('session.gc_maxlifetime', GARBAGE_TIMEOUT);
-session_set_cookie_params(COOKIE_TIMEOUT,'/');
+define( 'COOKIE_TIMEOUT', 315360000 );
+define( 'GARBAGE_TIMEOUT', COOKIE_TIMEOUT );
+ini_set( 'session.gc_maxlifetime', GARBAGE_TIMEOUT );
+session_set_cookie_params( COOKIE_TIMEOUT, '/' );
 // setting session dir
-$sessdir = '/tmp/'.$_SERVER['HTTP_HOST'];
-// if session dir not exists, create directory
-if (!is_dir($sessdir)) {
-    @mkdir($sessdir, 0777);
+if( !defined( 'IN_PHPUNIT' ) ) {
+	$sessdir = '/tmp/'.$_SERVER['HTTP_HOST'];
+	// if session dir not exists, create directory
+	if ( !is_dir( $sessdir ) ) {
+		@mkdir( $sessdir, 0777 );
+	}
+
+	// if directory exists, then set session.savepath otherwise let it go as is
+	if( is_dir( $sessdir ) ) {
+		ini_set( 'session.save_path', $sessdir );
+	}
+	session_start();	
 }
-// if directory exists, then set session.savepath otherwise let it go as is
-if(is_dir($sessdir)) {
-    ini_set('session.save_path', $sessdir);
-}
-session_start();
 
 require_once('db.php');
 require_once('functions.php');

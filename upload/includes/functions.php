@@ -94,11 +94,19 @@ function LogAccess($userid = 0)
 
 function GetServerURL()
 {
+	if( defined( 'IN_PHPUNIT' ) ) {
+		return;
+	}
+		
     return GetServerProtocol().$_SERVER['HTTP_HOST'];
 }
 
 function curPageURL()
 {
+	if( defined( 'IN_PHPUNIT' ) ) {
+		return;
+	}
+		
     $pageURL = 'http';
 
     if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") {
@@ -119,10 +127,14 @@ function curPageURL()
 
 function GetServerProtocol()
 {
-    if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+    if( defined( 'IN_PHPUNIT' ) ) {
+    	return;	
+    }
+    
+	if( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] == 'on' ) {
         return 'https://';
     } else {
-        $protocol = preg_replace('/^([a-z]+)\/.*$/', '\\1', strtolower($_SERVER['SERVER_PROTOCOL']));
+        $protocol = preg_replace( '/^([a-z]+)\/.*$/', '\\1', strtolower( $_SERVER['SERVER_PROTOCOL'] ) );
         $protocol .= '://';
 
         return $protocol;
@@ -473,7 +485,7 @@ function networkdays($s, $e, $holidays = array())
 }
 
 /**
- * how many work days there are in any given year
+ * determine how many work days there are in any given year
  *
  * @author  ghotinet
  * @link    http://www.php.net/manual/en/function.date.php#101379
@@ -739,4 +751,11 @@ function jQueryUIStringToTemplateName( $string )
 	$string = strtolower( $string );
 
 	return $string;
+}
+
+function inPHPUnit()
+{
+	if( basename( $_SERVER['PHP_SELF'] ) == 'phpunit' ) {
+		return true;	
+	}	
 }
