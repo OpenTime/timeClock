@@ -49,9 +49,9 @@ $.fn.themeswitcher = function(settings) {
 		updateCSS( $(this).attr('href') );
 		var themeName = $(this).find('span').text();
 		button.find('.jquery-ui-themeswitcher-title').text( options.buttonPreText + themeName );
-		$.cookie(options.cookieName, themeName, { expires: options.cookieExpires, path: options.cookiePath, onSet: options.cookieOnSet });
-		options.onSelect();
-		options.onSelectComplete();		
+		$.cookie(options.cookieName, themeName, { expires: options.cookieExpires, path: options.cookiePath, onSet: options.cookieOnSet });		
+		if(options.onSelect && switcherpane.is(':visible')){ options.onSelect(); }
+		if(options.onSelectComplete && switcherpane.is(':visible')){ options.onSelectComplete(); }		
 		if(options.closeOnSelect && switcherpane.is(':visible')){ switcherpane.spHide(); }		
 		return false;
 	});

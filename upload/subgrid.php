@@ -18,8 +18,8 @@
 define('THIS_PAGE', 'subgrid');
 require_once('includes/config.php');
 
-if(empty($_POST)) {
-    header('Location: '.GetServerURL().'/clockin');
+if( empty( $_POST ) ) {
+    header( 'Location: '.GetServerURL().'/clockin' );
 }
 
 // get the id passed automatically to the request
@@ -57,14 +57,14 @@ $res    = mysql_query($sql) OR die(mysql_error());
 $data       = array();
 $weekHours  = array();
 
-while($row = mysql_fetch_assoc($res)) {
-    if(strlen($row['outTimestamp'])) {
-        $row['totalHours']  = ($row['outTimestamp'] - $row['inTimestamp']);
-        $weekHours[]        = $row['totalHours'];
+while( $row = mysql_fetch_assoc( $res ) ) {
+    if( strlen( $row['outTimestamp'] ) ) {
+        $row['totalHours']  = ( $row['outTimestamp'] - $row['inTimestamp'] );
+        $weekHours[]        = $row['totalHours'] - lunchBreakDuration;
         $weekDayCount       = $count;
     } else {
-        $row['totalHours']  = (time() - $row['inTimestamp']);
-        $weekHours[]        = $row['totalHours'];
+        $row['totalHours']  = ( time() - $row['inTimestamp'] );
+        $weekHours[]        = $row['totalHours'] - lunchBreakDuration;
         $weekDayCount       = $count;
     }
 }
@@ -88,14 +88,14 @@ $res    = mysql_query($sql) OR die(mysql_error());
 $data       = array();
 $monthHours = array();
 
-while($row = mysql_fetch_assoc($res)) {
-    if(strlen($row['outTimestamp'])) {
-        $row['totalHours']  = ($row['outTimestamp'] - $row['inTimestamp']);
-        $monthHours[]       = $row['totalHours'];
+while( $row = mysql_fetch_assoc( $res ) ) {
+    if( strlen( $row['outTimestamp'] ) ) {
+        $row['totalHours']  = ( $row['outTimestamp'] - $row['inTimestamp'] );
+        $monthHours[]       = $row['totalHours'] - ( lunchBreakDuration * $count );
         $monthDayCount      = $count;
     } else {
-        $row['totalHours']  = (time() - $row['inTimestamp']);
-        $monthHours[]       = $row['totalHours'];
+        $row['totalHours']  = ( time() - $row['inTimestamp'] );
+        $monthHours[]       = $row['totalHours'] - ( lunchBreakDuration * $count );
         $monthDayCount      = $count;
     }
 }
@@ -118,12 +118,12 @@ $data       = array();
 $yearHours  = array();
 
 while($row = mysql_fetch_assoc($res)) {
-    if(strlen($row['outTimestamp'])) {
-        $row['totalHours']  = ($row['outTimestamp'] - $row['inTimestamp']);
+    if( strlen( $row['outTimestamp'] ) ) {
+        $row['totalHours']  = ( $row['outTimestamp'] - $row['inTimestamp'] ) - lunchBreakDuration;
         $yearHours[]        = $row['totalHours'];
         $yearDayCount       = $count;
     } else {
-        $row['totalHours']  = (time() - $row['inTimestamp']);
+        $row['totalHours']  = ( time() - $row['inTimestamp'] ) - lunchBreakDuration;
         $yearHours[]        = $row['totalHours'];
         $yearDayCount       = $count;
     }
@@ -132,14 +132,14 @@ while($row = mysql_fetch_assoc($res)) {
 $response->page     = 1;
 $response->total    = 1;
 $response->records  = 1;
-$response->rows     = array(array('cell' => array(  sec2hms(array_sum($weekHours)),
+$response->rows     = array( array( 'cell' => array(  sec2hms( array_sum( $weekHours ) ),
                                                     $weekDayCount,
-                                                    sec2hms(array_sum($monthHours)),
+                                                    sec2hms( array_sum( $monthHours ) ),
                                                     $monthDayCount,
-                                                    sec2hms(array_sum($yearHours)),
-                                                    $yearDayCount)
+                                                    sec2hms( array_sum( $yearHours ) ),
+                                                    $yearDayCount )
                                 )
                             );
 // return the formatted data
-header('Content-Type: application/json');
-echo json_encode($response);
+header( 'Content-Type: application/json' );
+echo json_encode( $response );

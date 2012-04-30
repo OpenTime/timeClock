@@ -37,8 +37,12 @@ if( @$_GET['settings'] == 'true' ) {
 }
 
 if( !empty( $_POST ) ) {
+	if( strlen( @$_POST['clockOutAll'] ) ) {
+		$timeClock->clockOutAll();
+		exit;
+	}
     if( !strlen( @$_POST['clockOut'] ) AND !strlen( @$_POST['clockIn'] ) ) {
-        header('Content-Type: application/json; charset=UTF-8');
+        header( 'Content-Type: application/json; charset=UTF-8' );
         exit( $jqGrid->output_json() );
     } elseif( strlen( @$_POST['clockOut'] ) ) {
         $timeClock->clockOut( $_POST['Id'] );
@@ -71,7 +75,7 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
 	</script>
 	
 	<script src="js/jquery-1.7.2.min.js"></script>
-    <script src="js/jquery-ui-1.8.19.custom.min.js"></script>    
+    <script src="js/jquery-ui-1.8.19.custom.min.js"></script>        
     <script src="js/consolelog.min.js"></script>
     <!--link rel="stylesheet" type="text/css" href="css/jquery.countdown.css"-->
     <script type="text/javascript" src="js/jquery.countdown.pack.js"></script>
@@ -96,14 +100,14 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
 	<script type="text/javascript">
 		var BASEURL			= '<?php echo BASEURL; ?>';
 		var CURRENT_THEME 	= '<?php echo $_SESSION['theme']; ?>';
-
-		if( DEBUG ) {
-			console.log( 'Selected jQuery UI Theme:  ' + CURRENT_THEME );
-		}	
 		
 		if( !strlen( CURRENT_THEME ) ) {
 			CURRENT_THEME = '<?php echo DEFAULT_JQUERY_UI_THEME; ?>';			
 		}
+
+		if( DEBUG ) {
+			console.log( 'Selected jQuery UI Theme:  ' + CURRENT_THEME );			
+		}				
 			
 		$(document).ready(function() {			
 	    	$('#switcher').themeswitcher( { 
@@ -111,16 +115,15 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
 		    	cookieExpires: 3650, 
 		    	cookiePath: '/',		   
 		    	cookieName: 'theme', 
-		    	cookieOnSet: function(cookieName, cookieValue) {
+		    	cookieOnSet: function( cookieName, cookieValue ) {
 		    		$.post( BASEURL + '/', { sessionUpdate: true, theme: cookieValue },
 							function( data ) {
-								// I'm chilling, chilling...								
-		    					$.unblockUI();
+	
 							}
 					);					
 			    },
 		    	onSelect: function() {
-		    		blockUIWithMessage();		    			
+		    		blockUIWithMessage( '', '', 1500 );		    			
 	        	},
 	        	onSelectComplete: function() {		     
 	        		
@@ -129,7 +132,7 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
 		});			
 	</script>
     
-    <?php if( @$clockedIn ) {
+    <?php if( @$clockedIn AND displayModal ) {
     ?>
 	<script type="text/javascript">
 	$(function() {
@@ -151,7 +154,7 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
 	});
 	</script>
     <?php
-    } else {
+    } elseif( !@$clockedIn AND displayModal ) {
     ?>
 	<script type="text/javascript">
 	$(function() {
@@ -160,7 +163,7 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
 			modal: true,
 			buttons: {
 				'Clock In': function() {
-                    $.post('index.php', { clockIn: 'true'},
+                    $.post('index.php', { clockIn: 'true' },
                         function(data) {
                             if(data == 'OK') {
                                 $('#list').trigger('reloadGrid');
@@ -176,9 +179,9 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
     }
     ?>
 </head>
-<body style="display: none;">    
-	<div>
+<body style="display: none;">
 
+<?php if( displayModal ) { ?>
 <?php if( @$clockedIn ) {
 ?>
 <div id="dialog-message" title="Clocked in" style="display: none;">
@@ -192,7 +195,7 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
         $('#sinceCountdown').countdown({
             since: new Date('<?php echo date('F d, Y H:i:s', $data[0]['inTimestamp']) ?>'),
             format: 'HMS',
-            layout: 'Clocked in for:&nbsp;&nbsp;{hn} {hl} {mn} {ml} {sn} {sl}',
+            layout: 'Clocked in for:&nbsp;&nbsp;{hn} {hl} {mn} {ml} {sn} {sl}'
         });
     </script>
 </div>
@@ -209,7 +212,7 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
 <?php
 }
 ?>
-</div>
+<?php } ?>
 
 	<script type="text/javascript">
 		$(function() {          
@@ -225,11 +228,41 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
 
     		$.unblockUI();
     		$('body').fadeIn();
-    		$('#dialog-message').fadeIn(); 
+    		$('#dialog-message').fadeIn();    		
+
+    		<?php if( @$clockedIn ) { ?>
+    		$( '#clockOutBtn' ).button( { icons: { primary: 'ui-icon-stop' } } );
+    		$( '#clockOutBtn' ).click(function() {
+    			blockUIWithMessage();        		
+                $.post('index.php', { clockOutAll: 'true' },
+                        function(data) {
+                            if(data == 'OK') {
+                                $('#list').trigger('reloadGrid');
+                                window.location.reload();					            
+                            }
+				});
+        	});
+    		<?php } else { ?>
+    		$( '#clockInBtn' ).button( { icons: { primary: 'ui-icon-play' } } );
+    		$( '#clockInBtn' ).click(function() {
+    			blockUIWithMessage();
+                $.post('index.php', { clockIn: 'true' },
+                        function(data) {
+                            if(data == 'OK') {
+                                $('#list').trigger('reloadGrid');
+                                window.location.reload();					            
+                            }
+				});
+        	});    		 
+    		<?php } ?>   		 
 		});
 	</script>
+	
+<div id="logo">
+	<a href="<?php echo BASEURL; ?>"><img src="img/logo.png" border="0"></a>
+</div>	
 
-<div id="mainBody" class="ui-widget-content">	
+<div id="mainBody" class="ui-widget-content">		
 	<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 		<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
 			<li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
@@ -240,13 +273,81 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
 			</li>
 		</ul>
 	</div>
-
 </div>
 
 <style type="text/css">
 	html { font-size: 70% }
 	body { font-size: 100% }
 </style>
+
+<?php if( @$clockedIn ) {
+?>
+<!--  START:	logged in message -->
+<div class="ui-widget">
+	<div style="margin-top: 20px; padding: 10px;" class="ui-state-highlight ui-corner-all">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td class="ui-icon ui-icon-clock">				
+				</td>
+				
+				<td style="padding-left: 5px;">
+						You are currently clocked in.
+    					<br /><br />
+    					Clock in time:&nbsp;&nbsp;<?php echo date( 'l, F d, Y H:i:s', $data[0]['inTimestamp'] ) ?>				
+				</td>			
+			</tr>
+						
+			<tr>
+				<td>
+				</td>
+				<td id="sinceCountdownWidget" style="white-space: nowrap; padding-left: 5px;">
+				</td>
+    			<script type="text/javascript">
+        			$('#sinceCountdownWidget').countdown({
+            			since: new Date('<?php echo date( 'F d, Y H:i:s', $data[0]['inTimestamp'] ) ?>'),
+            			format: 'HMS',
+            			layout: 'Clocked in for:&nbsp;&nbsp;{hn} {hl} {mn} {ml} {sn} {sl}'
+        			});
+    			</script>							
+			</tr>
+			
+			<tr>
+				<td>
+				</td>
+				<td style="padding-top: 5px;">
+					<button id="clockOutBtn">Clock Out</button>
+				</td>							
+			</tr>
+		</table>		 				
+	</div>
+</div>
+<!--  END:	logged in message -->
+<?php } else { ?>
+<!--  START:	logged out message -->
+<div class="ui-widget">
+	<div style="margin-top: 20px; padding: 10px;" class="ui-state-highlight ui-corner-all">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td class="ui-icon ui-icon-clock">				
+				</td>
+				
+				<td style="padding-left: 5px;">
+					You are not currently clocked in.				
+				</td>			
+			</tr>
+									
+			<tr>
+				<td>
+				</td>
+				<td style="padding-top: 5px;">
+					<button id="clockInBtn">Clock In</button>
+				</td>							
+			</tr>
+		</table>		 				
+	</div>
+</div>
+<!--  END:	logged out message -->
+<?php } ?>
 
 <!--  START:	blockUI on page load -->
 <div style="display: none;" class="blockUI"></div>

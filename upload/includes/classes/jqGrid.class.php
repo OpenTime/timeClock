@@ -29,11 +29,11 @@ class jqGrid
     function fetchAllHours()
     {
         $sql = "SELECT * FROM `records_recent_first`";
-        $res = mysql_query($sql) OR die(mysql_error());
+        $res = mysql_query( $sql ) OR die( mysql_error() );
 
-        if(mysql_num_rows($res) > 0) {
+        if( mysql_num_rows( $res ) > 0 ) {
             $data = array();
-            while($row = mysql_fetch_assoc($res)) {
+            while( $row = mysql_fetch_assoc( $res ) ) {
                 $data[] = $row;
             }
             return $data;
@@ -43,17 +43,17 @@ class jqGrid
     function rowCount()
     {
         $sql = "SELECT `Id` FROM `records_recent_first` ";
-        $res = mysql_query($sql) OR die(mysql_error());
+        $res = mysql_query( $sql ) OR die( mysql_error() );
 
-        return mysql_num_rows($res);
+        return mysql_num_rows( $res );
     }
 
     function output_json()
     {
         // normal work days
-        $workDays = explode(',', requiredWorkDays);
+        $workDays = explode( ',', requiredWorkDays );
 
-        if(empty($_POST)) {
+        if( empty( $_POST ) ) {
             return;
         }
 
@@ -98,17 +98,17 @@ class jqGrid
         $sql   .= "ORDER BY `inTimestamp` DESC ".$sidx." ".$sord." ";
         $sql   .= "LIMIT ".$start.", ".$limit;
 
-        $res    = mysql_query($sql) OR die(mysql_error());
+        $res    = mysql_query( $sql ) OR die( mysql_error() );
 
-        $count  = mysql_num_rows($res);
-        if($count > 0) {
+        $count  = mysql_num_rows( $res );
+        if( $count > 0 ) {
             $data = array();
-            while($row = mysql_fetch_assoc($res)) {
+            while( $row = mysql_fetch_assoc( $res ) ) {
                 $data[] = $row;
             }
         }
 
-        for ($i = 0; $i < $count; $i++) {
+        for ( $i = 0; $i < $count; $i++ ) {
             // START:   check for multiple clock-in events
             $sql    = "SELECT * FROM `records_recent_first` ";
             $sql   .= "WHERE `inTimestamp` < '".$data[$i]['inTimestamp']."' ";
@@ -117,9 +117,9 @@ class jqGrid
             $sql   .= "AND `year` = '".$data[$i]['year']."' ";
             $sql   .= "ORDER BY `Id` DESC ";
 
-            $res = mysql_query($sql) OR die(mysql_error());
+            $res = mysql_query( $sql ) OR die( mysql_error() );
 
-            if(mysql_num_rows($res) > 0) {
+            if( mysql_num_rows($res) > 0 ) {
                 $clockData = array();
                 while($row = mysql_fetch_assoc($res)) {
                     $clockData[] = $row;
@@ -127,37 +127,37 @@ class jqGrid
                 $data[$i]['multiple'] = true;
 
                 $timeData = array();
-                foreach($clockData AS $key => $value) {
-                    $timeData[] = $value['outTimestamp'] - $value['inTimestamp'];
+                foreach( $clockData AS $key => $value ) {
+                    $timeData[] = ( $value['outTimestamp'] - $value['inTimestamp'] );
                 }
 
-                $data[$i]['prevTime'] = array_sum($timeData);
+                $data[$i]['prevTime'] = array_sum( $timeData );
             }
             // END:   end check for multiple clock-in events
 
-            $data[$i]['inTime'] = date(dateFormat, $data[$i]['inTimestamp']);
+            $data[$i]['inTime'] = date( dateFormat, $data[$i]['inTimestamp'] );
 
             $wSql   = "SELECT * FROM `records` WHERE ";
-            $wSql  .= "`week` = '".mysql_real_escape_string($data[$i]['week'])."' ";
-            $wSql  .= "AND `year` = '".mysql_real_escape_string($data[$i]['year'])."' ";
-            $wSql  .= "AND `id` <= '".mysql_real_escape_string($data[$i]['Id'])."' ";
-            $wRes   = mysql_query($wSql) OR die(mysql_error());
+            $wSql  .= "`week` = '".mysql_real_escape_string( $data[$i]['week'] )."' ";
+            $wSql  .= "AND `year` = '".mysql_real_escape_string( $data[$i]['year'] )."' ";
+            $wSql  .= "AND `id` <= '".mysql_real_escape_string( $data[$i]['Id'] )."' ";
+            $wRes   = mysql_query( $wSql ) OR die( mysql_error() );
 
             $wData      = array();
             $weekHours  = array();
 
-            while($wRow = mysql_fetch_assoc($wRes)) {
-                if(strlen($wRow['outTimestamp'])) {
-                    $wRow['totalHours'] = ($wRow['outTimestamp'] - $wRow['inTimestamp']);
+            while( $wRow = mysql_fetch_assoc( $wRes ) ) {
+                if( strlen( $wRow['outTimestamp'] ) ) {
+                    $wRow['totalHours'] = ( $wRow['outTimestamp'] - $wRow['inTimestamp'] ) - lunchBreakDuration;
                     $weekHours[]        = $wRow['totalHours'];
                 } else {
-                    $wRow['totalHours'] = (time() - $wRow['inTimestamp']);
+                    $wRow['totalHours'] = ( time() - $wRow['inTimestamp'] ) - lunchBreakDuration;
                     $weekHours[]        = $wRow['totalHours'];
                 }
             }
 
-            $data[$i]['weekHours'] = sec2hms(array_sum($weekHours));
-            $data[$i]['wkBalance'] = ((requiredHoursPerWeek * 3600) - (array_sum($weekHours)));
+            $data[$i]['weekHours'] = sec2hms( array_sum( $weekHours ) );
+            $data[$i]['wkBalance'] = ( (requiredHoursPerWeek * 3600) - ( array_sum( $weekHours ) ) );
 
             if(preg_match('/-/', $data[$i]['wkBalance'])) {
                 preg_match('/(?P<digit>\d+)/', $data[$i]['wkBalance'], $matches);
@@ -272,11 +272,11 @@ class jqGrid
                     }
                 }
             } else {
-                $data[$i]['outTime']    = date(dateFormat, $data[$i]['outTimestamp']);
+                $data[$i]['outTime'] = date(dateFormat, $data[$i]['outTimestamp']);
                 if(!isset($data[$i]['prevTime'])) {
-                    $data[$i]['totalHours'] = sec2hms($data[$i]['outTimestamp'] - $data[$i]['inTimestamp']);
+                    $data[$i]['totalHours'] = sec2hms( ( $data[$i]['outTimestamp'] - $data[$i]['inTimestamp'] ) - lunchBreakDuration );
                 } else {
-                    $data[$i]['totalHours'] = sec2hms(($data[$i]['outTimestamp'] - $data[$i]['inTimestamp']) + $data[$i]['prevTime']);
+                    $data[$i]['totalHours'] = sec2hms( ( ( $data[$i]['outTimestamp'] - $data[$i]['inTimestamp'] ) + $data[$i]['prevTime'] ) - lunchBreakDuration );
                 }
                 $data[$i]['hours'] = timestampToHours($data[$i]['outTimestamp'] - $data[$i]['inTimestamp']);
                 if(!isset($data[$i]['prevTime'])) {
@@ -331,7 +331,7 @@ class jqGrid
 
     function outputSettingsJson()
     {
-        if(empty($_POST)) {
+        if( empty( $_POST ) ) {
             return;
         }
 

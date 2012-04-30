@@ -25,7 +25,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `work_hours`
+-- Database: `time_clock`
 --
 
 -- --------------------------------------------------------
@@ -52,8 +52,9 @@ INSERT INTO `config` (`Id`, `key`, `value`, `comment`) VALUES
 (3, 'timeZone', 'Europe/Berlin', 'time zone for all dates'),
 (4, 'dateFormat', 'H:i', NULL),
 (5, 'requiredDaysPerWeek', '5', 'days of work required per week'),
-(6, 'lunchBreakPerDay', '3600', 'duration of lunch break in seconds'),
-(7, 'requiredWorkDays', 'Monday,Tuesday,Wednesday,Thursday,Friday', 'days that work is required');
+(6, 'lunchBreakDuration', '3600', 'duration of lunch break in seconds'),
+(7, 'requiredWorkDays', 'Monday,Tuesday,Wednesday,Thursday,Friday', 'days that work is required'),
+(8, 'displayModal', '0', NULL);
 
 -- --------------------------------------------------------
 
@@ -69,8 +70,12 @@ CREATE TABLE IF NOT EXISTS `records` (
   `week` enum('1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','47','48','49','50','51','52') COLLATE utf8_unicode_ci NOT NULL,
   `inTimestamp` int(11) DEFAULT NULL,
   `outTimestamp` int(11) DEFAULT NULL,
+  `createDate` timestamp NULL DEFAULT NULL,
+  `lastEdit` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `comment` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`Id`),
-  UNIQUE KEY `uc_day` (`month`,`day`,`year`)
+  UNIQUE KEY `uc_day` (`month`,`day`,`year`,`inTimestamp`),
+  KEY `year_and_day` (`year`,`day`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
 
 -- --------------------------------------------------------
@@ -82,11 +87,9 @@ CREATE TABLE IF NOT EXISTS `records_chronological` (
 `Id` bigint(20) unsigned
 ,`month` enum('01','02','03','04','05','06','07','08','09','10','11','12')
 ,`day` enum('01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31')
-,`year` enum('2011')
-,`week` int(2) unsigned
-,`inTime` int(11)
+,`year` char(4)
+,`week` enum('1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','47','48','49','50','51','52')
 ,`inTimestamp` int(11)
-,`outTime` int(11)
 ,`outTimestamp` int(11)
 );
 -- --------------------------------------------------------
@@ -98,10 +101,9 @@ CREATE TABLE IF NOT EXISTS `records_recent_first` (
 `Id` bigint(20) unsigned
 ,`month` enum('01','02','03','04','05','06','07','08','09','10','11','12')
 ,`day` enum('01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31')
-,`year` enum('2011')
-,`week` int(2) unsigned
+,`year` char(4)
+,`week` enum('1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','47','48','49','50','51','52')
 ,`inTimestamp` int(11)
-,`outTime` int(11)
 ,`outTimestamp` int(11)
 );
 -- --------------------------------------------------------

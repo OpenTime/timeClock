@@ -20,14 +20,24 @@ $('#logo').live('click',
 		}
 );
 
-function blockUIWithMessage( title, message )
-{ 
-	title	= typeof title !== 'undefined' ? title : 'Loading...';
-	message = typeof message !== 'undefined' ? message : 'Loading, please wait...';
+function blockUIWithMessage( title, message, timeout )
+{ 	
+	title	= ( typeof title !== 'undefined' && strlen( title ) ) ? title : 'Loading...';
+	message = ( typeof message !== 'undefined' && strlen( message ) ) ? message : 'Loading, please wait...';
+	timeout	= ( typeof timeout !== 'undefined' && is_numeric( timeout ) ) ? timeout : 0;
 	
-	$.blockUI({ 
-		theme:		true, 
-        title:    	title, 
-        message:	message + '&nbsp;&nbsp;<img style="vertical-align: middle;" src="' + BASEURL + '/img/loading.gif" border="0">'
-	});     
+	if( timeout > 0 ) {		
+		$.blockUI({ 
+			theme:		true, 
+			title:    	title, 
+			message:	message + '&nbsp;&nbsp;<img style="vertical-align: middle;" src="' + BASEURL + '/img/loading.gif" border="0">',
+			timeout:	timeout
+		});	
+	} else {
+		$.blockUI({ 
+			theme:		true, 
+			title:    	title, 
+			message:	message + '&nbsp;&nbsp;<img style="vertical-align: middle;" src="' + BASEURL + '/img/loading.gif" border="0">'			
+		});	
+	}
 }

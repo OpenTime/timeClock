@@ -44,10 +44,10 @@ class timeClock
     {
         $data = $this->fetchConfig();
 
-        if(!empty($data)) {
-            $count = count($data);
-            for ($i = 0; $i < $count; $i++) {
-                define($data[$i]['key'], $data[$i]['value']);
+        if( !empty( $data ) ) {        	
+            $count = count( $data );
+            for ( $i = 0; $i < $count; $i++ ) {
+                define( $data[$i]['key'], $data[$i]['value'] );
             }
         }
     }
@@ -57,13 +57,13 @@ class timeClock
         $sql    = "SELECT * FROM `records` WHERE ";
         $sql   .= "`outTimestamp` IS NULL ";
 
-        $res = mysql_query($sql) OR die(mysql_error());
+        $res = mysql_query( $sql ) OR die( mysql_error() );
 
-        if(mysql_num_rows($res) > 0) {
+        if( mysql_num_rows( $res ) > 0 ) {
 
             $data = array();
 
-            while($row = mysql_fetch_assoc($res)) {
+            while( $row = mysql_fetch_assoc( $res ) ) {
                 $data[] = $row;
             }
 
@@ -75,13 +75,28 @@ class timeClock
     {
         $sql    = "UPDATE `records` SET ";
         $sql   .= "`outTimestamp` = '".time()."' WHERE ";
-        $sql   .= "`Id` = '".mysql_real_escape_string($Id)."' ";
+        $sql   .= "`Id` = '".mysql_real_escape_string( $Id )."' ";
         $sql   .= "LIMIT 1";
 
-        $res = mysql_query($sql) OR die(mysql_error());
+        $res = mysql_query( $sql ) OR die( mysql_error() );
 
         exit('OK');
     }
+    
+    function clockOutAll()
+    {
+    	$sql    = "UPDATE `records` SET ";
+    	$sql   .= "`outTimestamp` = '".time()."' WHERE ";
+/*     	$sql   .= "`month` = '".mysql_real_escape_string( date ( 'm' ) )."' AND ";
+    	$sql   .= "`day` = '".mysql_real_escape_string( date ( 'd' ) )."' AND ";
+    	$sql   .= "`week` = '".mysql_real_escape_string( date ( 'W' ) )."' AND ";
+    	$sql   .= "`year` = '".mysql_real_escape_string( date ( 'Y' ) )."' AND "; */
+    	$sql   .= "`outTimestamp` IS NULL ";
+    
+    	$res = mysql_query( $sql ) OR die( mysql_error() );
+    
+    	exit( 'OK' );
+    }    
 
     function clockIn()
     {
