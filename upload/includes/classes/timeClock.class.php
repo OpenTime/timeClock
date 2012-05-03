@@ -28,11 +28,11 @@ class timeClock
     function fetchConfig()
     {
         $sql = "SELECT * FROM `config`";
-        $res = mysql_query($sql) OR die(mysql_error());
+        $res = mysql_query( $sql ) OR die( mysql_error() );
 
-        if(mysql_num_rows($res) > 0) {
+        if( mysql_num_rows( $res ) > 0 ) {
             $data = array();
-            while($row = mysql_fetch_assoc($res)) {
+            while( $row = mysql_fetch_assoc( $res ) ) {
                 $data[] = $row;
             }
 
@@ -115,7 +115,7 @@ class timeClock
         $sql   .= "'".time()."' ";
         $sql   .= ");";
 
-        $res = mysql_query($sql) OR die(mysql_error());
+        $res = mysql_query( $sql ) OR die( mysql_error() );
 
         exit('OK');
     }

@@ -68,7 +68,16 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
 	<meta charset="utf-8">
 	<title>Time Clock</title>
 	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.19/themes/base/jquery-ui.css">
-	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.19/themes/<?php echo $_SESSION['themeString']; ?>/jquery-ui.css">
+	<?php	 
+	switch( $_SESSION['themeString'] ) {
+		case 'aristo':
+			echo '<link rel="stylesheet" href="'.BASEURL.'/css/jquery-ui/'.$_SESSION['themeString'].'/aristo.css">';
+			break;
+			
+		default:
+			echo '<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.19/themes/'.$_SESSION['themeString'].'/jquery-ui.css">';		
+	}
+	?>	
 	
 	<script type="text/javascript">
 		var DEBUG = true;
@@ -118,16 +127,20 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
 		    	cookieOnSet: function( cookieName, cookieValue ) {
 		    		$.post( BASEURL + '/', { sessionUpdate: true, theme: cookieValue },
 							function( data ) {
-	
+								
 							}
 					);					
 			    },
 		    	onSelect: function() {
-		    		blockUIWithMessage( '', '', 1500 );		    			
+		    		blockUIWithMessage( '', '', 1500 );
+		    		reloadPage();		    			
 	        	},
 	        	onSelectComplete: function() {		     
 	        		
-	        	}
+	        	},
+	        	appendThemes: function(switcherpane) {
+	        		//$('#themeGalleryList').append('<li style="width: 120px; padding: 2px; margin: 1px; border: 1px solid rgb(17, 17, 17); clear: left; float: left;"><a href="' + BASEURL + '/css/jquery-ui/aristo/aristo.css" style="color: rgb(170, 170, 170); text-decoration: none; float: left; width: 100%; outline: 0pt none;">			<img title="Test" alt="Test" src="http://jqueryui.com/themeroller/images/themeGallery/theme_90_swanky_purse.png" style="float: left; border: 1px solid rgb(51, 51, 51); margin: 0pt 2px;">			<span class="themeName" style="float: left; margin: 3px 0pt;">Test</span>			</a></li>');
+			    }
 	    	});	    	
 		});			
 	</script>
@@ -188,12 +201,12 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
 	<p>
     You are currently clocked in.
     <br />
-    Clock in time:&nbsp;&nbsp;<?php echo date('l, F d, Y H:i:s', $data[0]['inTimestamp']) ?>
+    Clock in time:&nbsp;&nbsp;<?php echo date( 'l, F d, Y H:i:s', $data[0]['inTimestamp'] ) ?>
     </p>
     <div id="sinceCountdown" style="white-space: nowrap"></div>
     <script type="text/javascript">
         $('#sinceCountdown').countdown({
-            since: new Date('<?php echo date('F d, Y H:i:s', $data[0]['inTimestamp']) ?>'),
+            since: new Date( '<?php echo date( 'F d, Y H:i:s', $data[0]['inTimestamp'] ) ?>' ),
             format: 'HMS',
             layout: 'Clocked in for:&nbsp;&nbsp;{hn} {hl} {mn} {ml} {sn} {sl}'
         });
@@ -300,8 +313,7 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
 			<tr>
 				<td>
 				</td>
-				<td id="sinceCountdownWidget" style="white-space: nowrap; padding-left: 5px;">
-				</td>
+				<td id="sinceCountdownWidget" style="white-space: nowrap; padding-left: 5px;"></td>
     			<script type="text/javascript">
         			$('#sinceCountdownWidget').countdown({
             			since: new Date('<?php echo date( 'F d, Y H:i:s', $data[0]['inTimestamp'] ) ?>'),
@@ -309,6 +321,51 @@ $_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
             			layout: 'Clocked in for:&nbsp;&nbsp;{hn} {hl} {mn} {ml} {sn} {sl}'
         			});
     			</script>							
+			</tr>
+			
+			<tr>
+				<td>
+				</td>
+				<td id="sinceCountdownLunchBreakWidget" style="white-space: nowrap; padding-left: 5px;"></td>
+    			<script type="text/javascript">
+        			$('#sinceCountdownLunchBreakWidget').countdown({
+            			since: new Date('<?php echo date( 'F d, Y H:i:s', $data[0]['inTimestamp'] + lunchBreakDuration ) ?>'),
+            			format: 'HMS',
+            			layout: 'Total Hours worked (minus lunch break):&nbsp;&nbsp;{hn} {hl} {mn} {ml} {sn} {sl}'
+        			});
+    			</script>							
+			</tr>
+			
+			<?php
+				$overTime = false;
+				$requiredHours = requiredHoursPerDay * 3600;
+				if( ( time() - $data[0]['inTimestamp'] ) >= $requiredHours ) {
+					$overTime = true;
+				}		 
+			?>
+			
+			<tr>
+				<td>
+				</td>
+				<td id="freeToGoCount" style="white-space: nowrap; padding-left: 5px;"></td>
+				<?php if($overTime) { ?>
+    			<script type="text/javascript">
+        			$('#freeToGoCount').countdown({
+            			since: new Date('<?php echo date( 'F d, Y H:i:s', $data[0]['inTimestamp'] + ( requiredHoursPerDay * 3600 ) ) ?>'),            			
+            			format: 'HMS',
+            			layout: '<font color="green">You are free to go now</font> (daily requirement met @ <?php echo date( 'l, F d, Y H:i:s', $data[0]['inTimestamp'] + ( requiredHoursPerDay * 3600 ) ); ?>). Overtime:&nbsp;&nbsp;{hn} {hl} {mn} {ml} {sn} {sl}'
+        			});
+    			</script>				
+				<?php } else { ?>
+    			<script type="text/javascript">
+        			$('#freeToGoCount').countdown({
+            			until: new Date('<?php echo date( 'F d, Y H:i:s', $data[0]['inTimestamp'] + ( requiredHoursPerDay * 3600 ) ) ?>'),            			
+            			onExpiry: reloadPage,
+            			format: 'HMS',
+            			layout: 'You are free to go in:&nbsp;&nbsp;{hn} {hl} {mn} {ml} {sn} {sl}' + ', which is:&nbsp;&nbsp;<?php echo date( 'l, F d, Y H:i:s', $data[0]['inTimestamp'] + ( requiredHoursPerDay * 3600 ) ); ?>'
+        			});
+    			</script>				
+				<?php } ?>							
 			</tr>
 			
 			<tr>

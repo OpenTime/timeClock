@@ -41,3 +41,8 @@ function blockUIWithMessage( title, message, timeout )
 		});	
 	}
 }
+
+function reloadPage()
+{
+	window.location.reload();
+}
