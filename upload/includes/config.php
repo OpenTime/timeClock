@@ -46,11 +46,14 @@ require_once('classes/PHPMailer/class.phpmailer.php');
 require_once('classes/timeClock.class.php');
 require_once('classes/jqGrid.class.php');
 require_once('classes/Smarty/Smarty.class.php');
+
 $mail                   = Singleton::getInstance('PHPMailer');
 $jqGrid                 = Singleton::getInstance('jqGrid');
 $smarty                 = Singleton::getInstance('Smarty');
 $smarty->compile_check  = true;
+$smarty->cache_dir		= SMARTY_CACHE_DIR;
 $smarty->debugging      = false;
-$smarty->template_dir 	= TEMPLATE;
+$smarty->template_dir 	= SMARTY_TEMPLATE_DIR;
+$smarty->loadPlugin('smarty_compiler_switch');
 $timeClock              = Singleton::getInstance('timeClock');
 $timeClock->defineConfig();

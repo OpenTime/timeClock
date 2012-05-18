@@ -217,10 +217,11 @@ class jqGrid
                                             });
 
                                             $('#clockOutButton').click(function() {
-                                                $.post('index.php', { clockOut: 'true', Id: '".$data[$i]['Id']."'},
+                                                $.post(BASEURL + '/index.php', { clockOut: 'true', Id: '".$data[$i]['Id']."'},
                                                     function(data) {
                                                         if(data == 'OK') {
-                                                            $('#list').trigger('reloadGrid');
+                                                			reloadPage();
+                                                            //$('#list').trigger('reloadGrid');
                                                         }
                                                     }
                                                 );
@@ -237,10 +238,11 @@ class jqGrid
                                             });
 
                                             $('#clockOutButton').click(function() {
-                                                $.post('index.php', { clockOut: 'true', Id: '".$data[$i]['Id']."'},
+                                                $.post(BASEURL + '/index.php', { clockOut: 'true', Id: '".$data[$i]['Id']."'},
                                                     function(data) {
                                                         if(data == 'OK') {
-                                                            $('#list').trigger('reloadGrid');
+                                                			reloadPage();
+                                                            //$('#list').trigger('reloadGrid');
                                                         }
                                                     }
                                                 );
@@ -259,13 +261,13 @@ class jqGrid
                                                 });
 
                                                 $('#clockOutButton').click(function() {
-                                                    $.post('index.php', { clockOut: 'true', Id: '".$data[$i]['Id']."'},
+                                                    $.post(BASEURL + '/index.php', { clockOut: 'true', Id: '".$data[$i]['Id']."'},
                                                         function(data) {
                                                             if(data == 'OK') {
-                                                                $('#list').trigger('reloadGrid');
-                                                                }
+                                                    			reloadPage();
+                                                                //$('#list').trigger('reloadGrid');
                                                             }
-                                                        );
+														});
                                                     });
                                                 </script>";
                 } else {
@@ -279,13 +281,13 @@ class jqGrid
                                                     });
 
                                                     $('#clockOutButton').click(function() {
-                                                        $.post('index.php', { clockOut: 'true', Id: '".$data[$i]['Id']."'},
+                                                        $.post(BASEURL + '/index.php', { clockOut: 'true', Id: '".$data[$i]['Id']."'},
                                                             function(data) {
                                                                 if(data == 'OK') {
-                                                                    $('#list').trigger('reloadGrid');
-                                                                    }
+                                                        			reloadPage();
+                                                                    //$('#list').trigger('reloadGrid');
                                                                 }
-                                                            );
+															});
                                                         });
                                                     </script>";
                     } else {

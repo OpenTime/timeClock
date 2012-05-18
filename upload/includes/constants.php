@@ -17,13 +17,15 @@
 
 define( 'BASEDIR', GetBaseDir() );
 define( 'BASEURL', GetBaseURL() );
-define( 'TEMPLATEDIR', BASEDIR.'/templates/' );
-define( 'TEMPLATENAME', 'generic' );
-define( 'TEMPLATE', TEMPLATEDIR.TEMPLATENAME );
-define( 'TEMPLATE_ROOT', BASEURL.'/templates/'.TEMPLATENAME );
-define( 'TEMPLATE_CSS', BASEURL.'/templates/'.TEMPLATENAME.'/css' );
-define( 'TEMPLATE_IMG', BASEURL.'/templates/'.TEMPLATENAME.'/images' );
-define( 'TEMPLATE_JS', BASEURL.'/templates/'.TEMPLATENAME.'/js' );
+define( 'SMARTY_CACHE_DIR', BASEDIR.'/smarty_cache' );
+define( 'SMARTY_TEMPLATE_BASEDIR', BASEDIR.'/templates/' );
+define( 'SMARTY_TEMPLATENAME', 'default' );
+define( 'SMARTY_TEMPLATE_DIR', SMARTY_TEMPLATE_BASEDIR.SMARTY_TEMPLATENAME );
+define( 'SMARTY_TEMPLATE_HTML', SMARTY_TEMPLATE_DIR.SMARTY_TEMPLATENAME.'/html' );
+define( 'SMARTY_TEMPLATE_ROOT', BASEURL.'/templates/'.SMARTY_TEMPLATENAME );
+define( 'SMARTY_TEMPLATE_CSS', BASEURL.'/templates/'.SMARTY_TEMPLATENAME.'/css' );
+define( 'SMARTY_TEMPLATE_IMG', BASEURL.'/templates/'.SMARTY_TEMPLATENAME.'/images' );
+define( 'SMARTY_TEMPLATE_JS', BASEURL.'/templates/'.SMARTY_TEMPLATENAME.'/js' );
 define( 'THIS_URL', curPageURL() );
 define( 'CURRENT_SCRIPT', ltrim( $_SERVER['SCRIPT_NAME'], '/' ) );
 define( 'DEFAULT_JQUERY_UI_THEME', 'Redmond' );

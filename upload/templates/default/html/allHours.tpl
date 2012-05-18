@@ -1,26 +1,26 @@
 <script type="text/javascript">
-jQuery(document).ready(function() {
-  jQuery("#list").jqGrid({
+jQuery(document).ready(function() {literal}{{/literal}
+  jQuery("#list").jqGrid({literal}{{/literal}
     // http://www.trirand.com/jqgridwiki/doku.php?id=wiki:options
-    //altRows: true,
-    url:'index.php',
+    altRows: true,
+    url:'{$smarty.const.BASEURL}/index.php',
     altRows: true,
     autowidth: true,
     height: '100%',
     datatype: 'json',
     mtype: 'POST',
-    loadtext: 'Loading&nbsp;&nbsp;' + '<img style="vertical-align: middle;" src="img/ajax-loader.gif" border="0">',
+    loadtext: 'Loading&nbsp;&nbsp;' + '<img style="vertical-align: middle;" src="{$smarty.const.BASEURL}/img/ajax-loader.gif" border="0">',
     colNames:['Month', 'Day', 'Year', 'Clock In Time', 'Clock Out Time', 'Hours Worked this Day', 'Daily Balance', 'Hours Worked this Week', 'Weekly Balance'],
     colModel :[
-      {name:'month', index:'month', editrules:{ required: true },editable:true,editoptions:{style:"width:377px"}},
-      {name:'day', index:'day', editrules:{ required: true },editable:true,editoptions:{style:"width:377px"}},
+      {literal}{{/literal}name:'month', index:'month', editrules:{literal}{{/literal} required: true {literal}}{/literal},editable:true,editoptions:{literal}{{/literal}style:"width:377px"{literal}}{/literal}{literal}}{/literal},
+      {literal}{name:'day', index:'day', editrules:{ required: true },editable:true,editoptions:{style:"width:377px"}},
       {name:'year', index:'year', align:'center', editrules:{ required: true },editable:true,editoptions:{style:"width:377px"}},
       {name:'clock_in', index:'inTime', align:'center', editrules:{ required: true },editable:true,editoptions:{style:"width:377px"}},
       {name:'clock_out', index:'outTime', align:'center', editrules:{ required: true },editable:true,editoptions:{style:"width:377px"}},
       {name:'total_hours', index:'totalHours', sortable:false, align:'center', editrules:{ required: true },editable:true,edittype:"select"},
       {name:'hours_over', index:'hoursOver', sortable:false, align:'center', editable:true, edittype:"checkbox"},
       {name:'weekHours', index:'weekHours', sortable:false, align:'center', editable:true, edittype:"checkbox"},
-      {name:'weekBalance', index:'weekBalance', sortable:false, align:'center', editable:true, edittype:"checkbox"},
+      {name:'weekBalance', index:'weekBalance', sortable:false, align:'center', editable:true, edittype:"checkbox"}{/literal},
     ],
     pager: '#pager',
     rowNum:30,
@@ -28,10 +28,10 @@ jQuery(document).ready(function() {
     sortname: 'month',
     sortorder: 'desc',
     viewrecords: true,
-    editurl: 'index.php',
+    editurl: '{$smarty.const.BASEURL}/index.php',
     subGrid: true,
-    subGridUrl: 'subgrid.php',
-    subGridModel: [{
+    subGridUrl: '{$smarty.const.BASEURL}/subgrid.php',
+    subGridModel: [{literal}{{/literal}
         name:  ['Hours worked this week',
                 'Days worked this week',
                 'Hours worked this month',
@@ -44,11 +44,11 @@ jQuery(document).ready(function() {
         params: ['month', 'day', 'year', 'clock_in']
     }]
     // http://www.trirand.com/jqgridwiki/doku.php?id=wiki:navigator
-  }).navGrid('#pager',{add: false, del: false, edit: false, view: true, search: true},
-  {left: 300, top: 10, width: 500, closeAfterEdit: true}, {left: 300, top: 10, width: 500, closeAfterAdd: true},
-  {},{width: 500}
+  {literal}}{/literal}).navGrid('#pager',{literal}{{/literal}add: false, del: false, edit: false, view: true, search: true{literal}}{/literal},
+  {literal}{{/literal}left: 300, top: 10, width: 500, closeAfterEdit: true{literal}}{/literal}, {literal}{{/literal}left: 300, top: 10, width: 500, closeAfterAdd: true{literal}}{/literal},
+  {literal}{}{/literal},{literal}{{/literal}width: 500{literal}}{/literal}
 );  
-});
+{literal}}{/literal});
 </script>
 
 <table id="list"></table>
