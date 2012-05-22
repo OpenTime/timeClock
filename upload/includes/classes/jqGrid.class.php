@@ -233,7 +233,9 @@ class jqGrid
                                             $('#since').countdown({
                                             until: new Date('".date( 'F d, Y H:i:s', $data[$i]['inTimestamp'] + ( requiredHoursPerDay * 3600 ) )."'),
                                             format: 'HMS',
-                                            onExpiry: reloadPage,                                            
+                                            onExpiry: function() {
+														reloadPage();
+											},                                            
                                             layout: '<font color=\"red\">-{hnn}{sep}{mnn}{sep}{snn}</font>',
                                             });
 

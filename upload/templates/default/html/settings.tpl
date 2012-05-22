@@ -3,7 +3,7 @@
 jQuery(document).ready(function(){literal}{{/literal}
   jQuery("#settingsList").jqGrid({literal}{{/literal}
     // http://www.trirand.com/jqgridwiki/doku.php?id=wiki:options
-    //altRows: true,
+    altRows: true,
     url:'{$smarty.const.BASEURL}/index.php?settings=true',
     autowidth: true,
     height: '100%',

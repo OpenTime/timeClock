@@ -281,7 +281,9 @@
     			<script type="text/javascript">
         			$('#freeToGoCount').countdown({literal}{{/literal}
             			until: new Date('{($data[0].inTimestamp + ( $smarty.const.requiredHoursPerDay * 3600 ))|date_format:"F d, Y H:i:s"}'),            			
-            			onExpiry: reloadPage,
+						onExpiry: function() {
+							reloadPage();
+						},
             			format: 'HMS',
             			layout: 'You are free to go in:&nbsp;&nbsp;{literal}{hn} {hl} {mn} {ml} {sn} {sl}{/literal}' + ', which is:&nbsp;&nbsp;{($data[0].inTimestamp + ( $smarty.const.requiredHoursPerDay * 3600 ))|date_format:"l, F d, Y H:i:s"}'
         			{literal}}{/literal});
