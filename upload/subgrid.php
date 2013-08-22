@@ -4,8 +4,8 @@
  * Subgrid
  *
  * @author      MarQuis L. Knox <opensource@marquisknox.com>
- * @license     GPL v2
- * @link        http://www.gnu.org/licenses/gpl-2.0.html
+ * @license     GNU Affero General Public License v3 (AGPL-3.0)
+ * @link        http://www.gnu.org/licenses/agpl-3.0.html
  * @link        https://github.com/MarQuisKnox/timeClock
  *
  * @since       Thursday, March 31, 2011 / 12:52 PM GMT+1 mknox

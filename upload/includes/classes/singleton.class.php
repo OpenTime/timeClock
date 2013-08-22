@@ -3,8 +3,8 @@
  * Singleton Class
  *
  * @author      MarQuis L. Knox <opensource@marquisknox.com>
- * @license     GPL v2
- * @link        http://www.gnu.org/licenses/gpl-2.0.html
+ * @license     GNU Affero General Public License v3 (AGPL-3.0)
+ * @link        http://www.gnu.org/licenses/agpl-3.0.html
  * @link        http://phpbuilder.com/columns/Singleton-PHP5/Octavia_Anghel112310.php3
  *
  * @since       Friday, March 04, 2011 / 04:09 PM UTC+1 mknox

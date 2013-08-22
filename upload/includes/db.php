@@ -4,8 +4,8 @@
  * DB Connection
  *
  * @author      MarQuis L. Knox <opensource@marquisknox.com>
- * @license     GPL v2
- * @link        http://www.gnu.org/licenses/gpl-2.0.html
+ * @license     GNU Affero General Public License v3 (AGPL-3.0)
+ * @link        http://www.gnu.org/licenses/agpl-3.0.html
  * @link        https://github.com/MarQuisKnox/timeClock
  *
  * @since       Saturday, September 19, 2009 / 10:50 PM GMT+1 mknox
@@ -45,7 +45,7 @@ if ( !function_exists('mysql_set_charset') ) {
      }
 }
 
-$mysql = mysql_connect($config['db_host'], $config['db_user'], $config['db_pass']) OR die(mysql_error());
+$mysql = mysql_connect($config['db_host'], $config['db_user'], $config['db_pass']) OR die( $smarty->display( 'html/error/error.tpl' ) );
 mysql_select_db($config['db_name']) OR die(mysql_error());
 mysql_set_charset('utf8', $mysql);
 mysql_query( 'SET NAMES utf8', $mysql );

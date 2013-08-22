@@ -4,8 +4,8 @@
  * PHPUnit Test
  *
  * @author      MarQuis L. Knox <opensource@marquisknox.com>
- * @license     GPL v2
- * @link        http://www.gnu.org/licenses/gpl-2.0.html
+ * @license     GNU Affero General Public License v3 (AGPL-3.0)
+ * @link        http://www.gnu.org/licenses/agpl-3.0.html
  * @link        https://github.com/MarQuisKnox/timeClock
  *
  * @since       Thursday, April 26, 2012 / 04:54 PM GMT+1 mknox

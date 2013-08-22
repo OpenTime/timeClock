@@ -4,8 +4,8 @@
  * Global Config
  *
  * @author      MarQuis L. Knox <opensource@marquisknox.com>
- * @license     GPL v2
- * @link        http://www.gnu.org/licenses/gpl-2.0.html
+ * @license     GNU Affero General Public License v3 (AGPL-3.0)
+ * @link        http://www.gnu.org/licenses/agpl-3.0.html
  * @link        https://github.com/MarQuisKnox/timeClock
  *
  * @since       Wednesday, October 21, 2009 / 06:52 PM GMT+1 mknox
@@ -16,7 +16,7 @@
  */
 
 error_reporting( E_ALL );
-ini_set('display_errors', true);
+ini_set( 'display_errors', true );
 define( 'IN_SITE',true );
 // 10 years
 define( 'COOKIE_TIMEOUT', 315360000 );
@@ -38,22 +38,48 @@ if( !defined( 'IN_PHPUNIT' ) ) {
 	session_start();	
 }
 
-require_once('db.php');
 require_once('functions.php');
 require_once('constants.php');
+
+if( isset( $_COOKIE['theme'] ) AND strlen( @$_COOKIE['theme'] ) ) {
+	$_SESSION['theme'] = $_COOKIE['theme'];
+} else {
+	setcookie( 'theme', DEFAULT_JQUERY_UI_THEME );
+	$_SESSION['theme'] = DEFAULT_JQUERY_UI_THEME;
+}
+
+$_SESSION['themeString'] = jQueryUIStringToTemplateName( $_SESSION['theme'] );
+
+if( file_exists( BASEDIR.'/install.me' ) && !defined('IN_INSTALL') ) {
+	header( 'Location:'.BASEURL.'/install' );
+}
+
 require_once('classes/singleton.class.php');
-require_once('classes/PHPMailer/class.phpmailer.php');
-require_once('classes/timeClock.class.php');
-require_once('classes/jqGrid.class.php');
 require_once('classes/Smarty/Smarty.class.php');
 
-$mail                   = Singleton::getInstance('PHPMailer');
-$jqGrid                 = Singleton::getInstance('jqGrid');
 $smarty                 = Singleton::getInstance('Smarty');
 $smarty->compile_check  = true;
 $smarty->cache_dir		= SMARTY_CACHE_DIR;
+$smarty->compile_dir	= SMARTY_COMPILE_DIR;
 $smarty->debugging      = false;
 $smarty->template_dir 	= SMARTY_TEMPLATE_DIR;
 $smarty->loadPlugin('smarty_compiler_switch');
-$timeClock              = Singleton::getInstance('timeClock');
-$timeClock->defineConfig();
+
+if( !defined( 'IN_INSTALL') ) {
+	require_once('db.php');	
+}
+
+require_once('classes/PHPMailer/class.phpmailer.php');
+
+if( !defined( 'IN_INSTALL') ) {
+	require_once('classes/timeClock.class.php');
+	require_once('classes/jqGrid.class.php');
+}
+
+$mail = Singleton::getInstance('PHPMailer');
+
+if( !defined( 'IN_INSTALL') ) {
+	$jqGrid		= Singleton::getInstance('jqGrid');
+	$timeClock	= Singleton::getInstance('timeClock');
+	$timeClock->defineConfig();
+}

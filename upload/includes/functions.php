@@ -3,8 +3,8 @@
  * Various Functions
  *
  * @author      MarQuis L. Knox <opensource@marquisknox.com>
- * @license     GPL v2
- * @link        http://www.gnu.org/licenses/gpl-2.0.html
+ * @license     GNU Affero General Public License v3 (AGPL-3.0)
+ * @link        http://www.gnu.org/licenses/agpl-3.0.html
  * @link        https://github.com/MarQuisKnox/timeClock
  *
  * @since       Wednesday, October 21, 2009 / 07:01 PM UTC+1 (mknox)
@@ -20,14 +20,22 @@ ini_set( 'display_errors', true );
 
 function GetBaseDir()
 {
-    $pathParts 	    = pathinfo($_SERVER['SCRIPT_FILENAME']);
+    $pathParts 	    = pathinfo( $_SERVER['SCRIPT_FILENAME'] );
     $basedirPath 	= $pathParts['dirname'];
+    
     return $basedirPath;
 }
 
 function GetBaseURL()
 {
-	return GetServerURL().'/'.basename( GetBaseDir() );
+	// subdomain check
+	$dir = basename( GetBaseDir() );
+	
+	if( !preg_match( '/'.$dir.'/', $_SERVER['HTTP_HOST'] ) ) {
+		return GetServerURL().'/'.$dir;		
+	} else {
+		return GetServerURL().'/';		
+	}
 }
 
 function WriteLog($filename, $msg, $mode = 'a')

@@ -2,8 +2,8 @@
  * Various JavaScript Functions
  *
  * @author      MarQuis L. Knox <opensource@marquisknox.com>
- * @license     GPL v2
- * @link        http://www.gnu.org/licenses/gpl-2.0.html
+ * @license     GNU Affero General Public License v3 (AGPL-3.0)
+ * @link        http://www.gnu.org/licenses/agpl-3.0.html
  * @link        https://github.com/MarQuisKnox/timeClock
  *
  * @since       Wednesday, April 25, 2012 / 01:47 AM GMT+1 mknox
@@ -30,14 +30,14 @@ function blockUIWithMessage( title, message, timeout )
 		$.blockUI({ 
 			theme:		true, 
 			title:    	title, 
-			message:	message + '&nbsp;&nbsp;<img style="vertical-align: middle;" src="' + BASEURL + '/img/loading.gif" border="0">',
+			message:	message + '&nbsp;&nbsp;<img style="vertical-align: middle;" src="../img/loading.gif" border="0">',
 			timeout:	timeout
 		});	
 	} else {
 		$.blockUI({ 
 			theme:		true, 
 			title:    	title, 
-			message:	message + '&nbsp;&nbsp;<img style="vertical-align: middle;" src="' + BASEURL + '/img/loading.gif" border="0">'			
+			message:	message + '&nbsp;&nbsp;<img style="vertical-align: middle;" src="../img/loading.gif" border="0">'			
 		});	
 	}
 }
