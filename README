@@ -1,8 +1,9 @@
-#Attention:
+# Attention:
+
 This doesn't work at all right now. I will fix it when I have time.
 
 
-Overview:
+# Overview:
 
 'timeClock' is a script written in PHP to track the number of hours worked per day.
 It is designed for a single person.  I created this script to track my own 
